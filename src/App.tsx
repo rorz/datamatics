@@ -4,7 +4,7 @@ import "./index.css";
 const SCENE_WIDTH_PX = 1584;
 const SCENE_HEIGHT_PX = 396;
 const ROW_WIDTH_PX = SCENE_WIDTH_PX;
-const ROW_HEIGHT_PX = 19;
+const ROW_HEIGHT_PX = 17;
 
 export function App() {
   useEffect(() => {
@@ -13,20 +13,24 @@ export function App() {
       throw new Error("No canvas!");
     const ctx = canvas.getContext("2d");
     if (ctx === null) throw new Error("No context!");
-    //
+    ctx.clearRect(0, 0, SCENE_WIDTH_PX, SCENE_HEIGHT_PX);
 
-    let i = 0;
-    while (i <= ROW_WIDTH_PX) {
-      const blockSize = Math.ceil(Math.random() * 15);
-      const colorRand = Math.random();
+    for (let y = 0; y < SCENE_HEIGHT_PX; y += ROW_HEIGHT_PX) {
+      if ((y / ROW_HEIGHT_PX) % 3 === 2) continue;
 
-      if (colorRand < 0.4) {
-        ctx.fillStyle = "white";
-      } else {
-        ctx.fillStyle = "black";
+      let i = 0;
+      while (i < ROW_WIDTH_PX) {
+        const blockSize = 1 + Math.floor(Math.random() ** 3 * 15);
+        const colorRand = Math.random();
+
+        if (colorRand < 0.4) {
+          ctx.fillStyle = "white";
+        } else {
+          ctx.fillStyle = "black";
+        }
+        ctx.fillRect(i, y, blockSize, ROW_HEIGHT_PX);
+        i += blockSize;
       }
-      ctx.fillRect(i, 0, blockSize, ROW_HEIGHT_PX);
-      i += blockSize;
     }
   }, []);
 
