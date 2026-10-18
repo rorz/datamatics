@@ -89,10 +89,17 @@ function downloadCanvas() {
   const canvas = document.getElementById("canvas");
   if (!(canvas instanceof HTMLCanvasElement)) return;
 
-  const link = document.createElement("a");
-  link.download = "datamatics.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+  canvas.toBlob((blob) => {
+    if (blob === null) return;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = "datamatics.png";
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, "image/png");
 }
 
 export function App() {
