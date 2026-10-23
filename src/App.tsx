@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import "./index.css";
 
 const SCENE_WIDTH_PX = 1584;
@@ -103,7 +103,7 @@ function downloadCanvas() {
 }
 
 export function App() {
-  useEffect(() => {
+  const draw = useCallback(() => {
     const canvas = document.getElementById("canvas");
     if (canvas === null || !(canvas instanceof HTMLCanvasElement))
       throw new Error("No canvas!");
@@ -190,6 +190,10 @@ export function App() {
     }
   }, []);
 
+  useEffect(() => {
+    draw();
+  }, [draw]);
+
   return (
     <div className="flex flex-col items-center justify-center bg-zinc-900 min-h-screen w-screen">
       <canvas
@@ -198,13 +202,22 @@ export function App() {
         height={SCENE_HEIGHT_PX}
         className="bg-black"
       ></canvas>
-      <button
-        type="button"
-        onClick={downloadCanvas}
-        className="mt-4 rounded border border-white/20 px-3 py-1.5 text-xs font-light text-white/70 transition hover:border-white/50 hover:text-white"
-      >
-        Download PNG
-      </button>
+      <div className="flex gap-2 items-center justify-center w-full">
+        <button
+          type="button"
+          onClick={downloadCanvas}
+          className="mt-4 rounded border border-white/20 px-3 py-1.5 text-xs font-light text-white/70 transition hover:border-white/50 hover:text-white"
+        >
+          Download PNG
+        </button>
+        <button
+          type="button"
+          onClick={draw}
+          className="mt-4 rounded border border-white/20 px-3 py-1.5 text-xs font-light text-black/70 transition hover:border-white/50 bg-white hover:text-red-500"
+        >
+          Refresh
+        </button>
+      </div>
     </div>
   );
 }
